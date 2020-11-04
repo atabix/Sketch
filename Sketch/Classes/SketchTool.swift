@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol SketchTool {
+@objc protocol SketchTool {
     var lineWidth: CGFloat { get set }
     var lineColor: UIColor { get set }
     var lineAlpha: CGFloat { get set }
@@ -18,13 +18,13 @@ protocol SketchTool {
     func draw()
 }
 
-public enum PenType {
+@objc public enum PenType: Int {
     case normal
     case blur
     case neon
 }
 
-class PenTool: UIBezierPath, SketchTool {
+@objc class PenTool: UIBezierPath, SketchTool {
     var path: CGMutablePath
     var lineColor: UIColor
     var lineAlpha: CGFloat
@@ -104,7 +104,7 @@ class PenTool: UIBezierPath, SketchTool {
     }
 }
 
-class EraserTool: PenTool {
+@objc class EraserTool: PenTool {
     override func draw() {
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
         ctx.setShouldAntialias(false)
@@ -118,14 +118,14 @@ class EraserTool: PenTool {
     }
 }
 
-class LineTool: SketchTool {
+@objc class LineTool: NSObject, SketchTool {
     var lineWidth: CGFloat
     var lineColor: UIColor
     var lineAlpha: CGFloat
     var firstPoint: CGPoint
     var lastPoint: CGPoint
 
-    init() {
+    override init() {
         lineWidth = 1.0
         lineAlpha = 1.0
         lineColor = .blue
@@ -169,14 +169,14 @@ class LineTool: SketchTool {
     }
 }
 
-class ArrowTool: SketchTool {
+@objc class ArrowTool: NSObject, SketchTool {
     var lineWidth: CGFloat
     var lineColor: UIColor
     var lineAlpha: CGFloat
     var firstPoint: CGPoint
     var lastPoint: CGPoint
 
-    init() {
+    override init() {
         lineWidth = 1.0
         lineAlpha = 1.0
         lineColor = .black
@@ -233,7 +233,7 @@ class ArrowTool: SketchTool {
     }
 }
 
-class RectTool: SketchTool {
+@objc class RectTool: NSObject, SketchTool {
     var lineWidth: CGFloat
     var lineAlpha: CGFloat
     var lineColor: UIColor
@@ -241,7 +241,7 @@ class RectTool: SketchTool {
     var lastPoint: CGPoint
     var isFill: Bool
 
-    init() {
+    override init() {
         lineWidth = 1.0
         lineAlpha = 1.0
         lineColor = .blue
@@ -275,7 +275,7 @@ class RectTool: SketchTool {
     }
 }
 
-class EllipseTool: SketchTool {
+@objc class EllipseTool: NSObject, SketchTool {
     var eraserWidth: CGFloat
     var lineWidth: CGFloat
     var lineAlpha: CGFloat
@@ -284,7 +284,7 @@ class EllipseTool: SketchTool {
     var lastPoint: CGPoint
     var isFill: Bool
 
-    init() {
+    override init() {
         eraserWidth = 0
         lineWidth = 1.0
         lineAlpha = 1.0
@@ -318,14 +318,14 @@ class EllipseTool: SketchTool {
     }
 }
 
-class StarTool: SketchTool {
+@objc class StarTool: NSObject, SketchTool {
     var lineWidth: CGFloat
     var lineColor: UIColor
     var lineAlpha: CGFloat
     var firstPoint: CGPoint
     var lastPoint: CGPoint
 
-    init() {
+    override init() {
         lineWidth = 0
         lineColor = .blue
         lineAlpha = 0
@@ -374,14 +374,14 @@ class StarTool: SketchTool {
     }
 }
 
-class StampTool: SketchTool {
+@objc class StampTool: NSObject, SketchTool {
     var lineWidth: CGFloat
     var lineColor: UIColor
     var lineAlpha: CGFloat
     var touchPoint: CGPoint
     var stampImage: UIImage?
 
-    init() {
+    override init() {
         lineWidth = 0
         lineColor = .blue
         lineAlpha = 0
@@ -419,13 +419,13 @@ class StampTool: SketchTool {
     }
 }
 
-class FillTool: SketchTool {
+@objc class FillTool: NSObject, SketchTool {
     var lineWidth: CGFloat
     var lineColor: UIColor
     var lineAlpha: CGFloat
     var touchPoint: CGPoint
 
-    init() {
+    override init() {
         lineWidth = 0
         lineColor = .blue
         lineAlpha = 0

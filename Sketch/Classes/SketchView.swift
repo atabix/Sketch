@@ -8,7 +8,7 @@
 
 import UIKit
 
-public enum SketchToolType {
+@objc public enum SketchToolType: Int {
     case pen
     case eraser
     case stamp
@@ -22,7 +22,7 @@ public enum SketchToolType {
     case fill
 }
 
-public enum ImageRenderingMode {
+@objc public enum ImageRenderingMode: Int {
     case scale
     case original
 }
@@ -32,14 +32,14 @@ public enum ImageRenderingMode {
     @objc optional func drawView(_ view: SketchView, didEndDrawUsingTool tool: AnyObject)
 }
 
-public class SketchView: UIView {
-    public var lineColor = UIColor.black
-    public var lineWidth = CGFloat(10)
-    public var lineAlpha = CGFloat(1)
-    public var stampImage: UIImage?
-    public var drawTool: SketchToolType = .pen
-    public var drawingPenType: PenType = .normal
-    public var sketchViewDelegate: SketchViewDelegate?
+@objc public class SketchView: UIView {
+    @objc public var lineColor = UIColor.black
+    @objc public var lineWidth = CGFloat(10)
+    @objc public var lineAlpha = CGFloat(1)
+    @objc public var stampImage: UIImage?
+    @objc public var drawTool: SketchToolType = .pen
+    @objc public var drawingPenType: PenType = .normal
+    @objc public var sketchViewDelegate: SketchViewDelegate?
     private var currentTool: SketchTool?
     private let pathArray: NSMutableArray = NSMutableArray()
     private let bufferArray: NSMutableArray = NSMutableArray()
@@ -64,7 +64,7 @@ public class SketchView: UIView {
         backgroundColor = UIColor.clear
     }
 
-    public override func draw(_ rect: CGRect) {
+    @objc public override func draw(_ rect: CGRect) {
         super.draw(rect)
 
         switch drawMode {
@@ -149,7 +149,7 @@ public class SketchView: UIView {
         }
     }
 
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    @objc public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
 
         if currentTool != nil {
@@ -183,7 +183,7 @@ public class SketchView: UIView {
         }
     }
 
-    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    @objc public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
 
         previousPoint2 = previousPoint1
@@ -200,7 +200,7 @@ public class SketchView: UIView {
         }
     }
 
-    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    @objc public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         touchesMoved(touches, with: event)
         finishDrawing()
     }
@@ -216,7 +216,7 @@ public class SketchView: UIView {
         currentTool = nil
     }
 
-    public func clear() {
+    @objc public func clear() {
         resetTool()
         bufferArray.removeAllObjects()
         pathArray.removeAllObjects()
@@ -225,7 +225,7 @@ public class SketchView: UIView {
         setNeedsDisplay()
     }
 
-    func pinch() {
+    @objc func pinch() {
         resetTool()
         guard let tool = pathArray.lastObject as? SketchTool else { return }
         bufferArray.add(tool)
@@ -235,7 +235,7 @@ public class SketchView: UIView {
         setNeedsDisplay()
     }
 
-    public func loadImage(image: UIImage, drawMode: ImageRenderingMode = .original) {
+    @objc public func loadImage(image: UIImage, drawMode: ImageRenderingMode = .original) {
         self.image = image
         self.drawMode = drawMode
         backgroundImage =  image.copy() as? UIImage
@@ -246,7 +246,7 @@ public class SketchView: UIView {
         setNeedsDisplay()
     }
 
-    public func undo() {
+    @objc public func undo() {
         if canUndo() {
             guard let tool = pathArray.lastObject as? SketchTool else { return }
             resetTool()
@@ -258,7 +258,7 @@ public class SketchView: UIView {
         }
     }
 
-    public func redo() {
+    @objc public func redo() {
         if canRedo() {
             guard let tool = bufferArray.lastObject as? SketchTool else { return }
             resetTool()
@@ -270,11 +270,11 @@ public class SketchView: UIView {
         }
     }
 
-    public func canUndo() -> Bool {
+    @objc public func canUndo() -> Bool {
         return pathArray.count > 0
     }
 
-    public func canRedo() -> Bool {
+    @objc public func canRedo() -> Bool {
         return bufferArray.count > 0
     }
 }
